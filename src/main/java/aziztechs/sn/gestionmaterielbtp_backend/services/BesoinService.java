@@ -12,8 +12,7 @@ import aziztechs.sn.gestionmaterielbtp_backend.repositories.UtilisateurRepositor
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,14 +38,18 @@ public class BesoinService {
     }
 
     public BesoinResponse createBesoin(BesoinRequest request) {
-        Utilisateur currentUser = getCurrentUser();
+        // TODO: Implémenter la récupération de l'utilisateur connecté après l'ajout de la sécurité
+        // Pour l'instant, nous utilisons le premier utilisateur trouvé
+        Utilisateur utilisateur = utilisateurRepository.findAll().stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Aucun utilisateur trouvé"));
         
         Besoin besoin = new Besoin();
         besoin.setDescription(request.getDescription());
         besoin.setUnite(request.getUnite());
         besoin.setQuantite(request.getQuantite());
         besoin.setDateDemande(LocalDate.now());
-        besoin.setUtilisateur(currentUser);
+        besoin.setUtilisateur(utilisateur);
         besoin.setIsUrgence(request.getIsUrgence() != null ? request.getIsUrgence() : false);
         besoin.setStatut(EBesoinStatut.EN_ATTENTE);
 
@@ -58,12 +61,7 @@ public class BesoinService {
         Besoin besoin = besoinRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Besoin non trouvé avec l'ID: " + id));
 
-        // Vérifier que l'utilisateur peut modifier ce besoin
-        Utilisateur currentUser = getCurrentUser();
-        if (!besoin.getUtilisateur().getId().equals(currentUser.getId()) && 
-            !currentUser.getRole().name().equals("ROLE_ADMIN_SYSTEME")) {
-            throw new RuntimeException("Vous n'êtes pas autorisé à modifier ce besoin");
-        }
+        // TODO: Ajouter la vérification des permissions après l'implémentation de la sécurité
 
         besoin.setDescription(request.getDescription());
         besoin.setUnite(request.getUnite());
@@ -80,20 +78,15 @@ public class BesoinService {
         Besoin besoin = besoinRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Besoin non trouvé avec l'ID: " + id));
 
-        // Vérifier que l'utilisateur peut supprimer ce besoin
-        Utilisateur currentUser = getCurrentUser();
-        if (!besoin.getUtilisateur().getId().equals(currentUser.getId()) && 
-            !currentUser.getRole().name().equals("ROLE_ADMIN_SYSTEME")) {
-            throw new RuntimeException("Vous n'êtes pas autorisé à supprimer ce besoin");
-        }
+        // TODO: Ajouter la vérification des permissions après l'implémentation de la sécurité
 
         besoinRepository.delete(besoin);
     }
 
     public Page<BesoinResponse> getBesoinsByCurrentUser(Pageable pageable) {
-        Utilisateur currentUser = getCurrentUser();
-        Page<Besoin> besoins = besoinRepository.findByUtilisateur(currentUser, pageable);
-        return besoins.map(this::convertToResponse);
+        // TODO: Implémenter après l'ajout de la sécurité
+        // Pour l'instant, retourner tous les besoins
+        return getAllBesoins(pageable);
     }
 
     public BesoinResponse marquerUrgent(Long id) {
@@ -119,10 +112,5 @@ public class BesoinService {
         return response;
     }
 
-    private Utilisateur getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        return utilisateurRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
-    }
+
 }
