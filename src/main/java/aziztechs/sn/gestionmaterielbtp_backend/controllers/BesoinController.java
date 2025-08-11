@@ -4,7 +4,6 @@ import aziztechs.sn.gestionmaterielbtp_backend.dtos.request.BesoinRequest;
 import aziztechs.sn.gestionmaterielbtp_backend.dtos.response.BesoinResponse;
 import aziztechs.sn.gestionmaterielbtp_backend.services.BesoinService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,21 +11,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/besoins")
 @RequiredArgsConstructor
 @Tag(name = "Besoins", description = "API de gestion des besoins")
-@SecurityRequirement(name = "bearerAuth")
 public class BesoinController {
 
     private final BesoinService besoinService;
 
     @GetMapping
     @Operation(summary = "Lister tous les besoins", description = "Récupère la liste paginée de tous les besoins")
-    @PreAuthorize("hasRole('ADMIN_SYSTEME') or hasRole('CHEF_PROJET') or hasRole('RESPONSABLE_ACHATS')")
     public ResponseEntity<Page<BesoinResponse>> getAllBesoins(Pageable pageable) {
         Page<BesoinResponse> besoins = besoinService.getAllBesoins(pageable);
         return ResponseEntity.ok(besoins);
@@ -34,7 +30,6 @@ public class BesoinController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Récupérer un besoin par ID", description = "Récupère les détails d'un besoin spécifique")
-    @PreAuthorize("hasRole('ADMIN_SYSTEME') or hasRole('CHEF_PROJET') or hasRole('RESPONSABLE_ACHATS')")
     public ResponseEntity<BesoinResponse> getBesoinById(@PathVariable Long id) {
         BesoinResponse besoin = besoinService.getBesoinById(id);
         return ResponseEntity.ok(besoin);
@@ -42,7 +37,6 @@ public class BesoinController {
 
     @PostMapping
     @Operation(summary = "Créer un nouveau besoin", description = "Crée un nouveau besoin dans le système")
-    @PreAuthorize("hasRole('CHEF_PROJET')")
     public ResponseEntity<BesoinResponse> createBesoin(@Valid @RequestBody BesoinRequest besoinRequest) {
         BesoinResponse createdBesoin = besoinService.createBesoin(besoinRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBesoin);
@@ -50,7 +44,6 @@ public class BesoinController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Mettre à jour un besoin", description = "Met à jour les informations d'un besoin existant")
-    @PreAuthorize("hasRole('CHEF_PROJET')")
     public ResponseEntity<BesoinResponse> updateBesoin(@PathVariable Long id, @Valid @RequestBody BesoinRequest besoinRequest) {
         BesoinResponse updatedBesoin = besoinService.updateBesoin(id, besoinRequest);
         return ResponseEntity.ok(updatedBesoin);
@@ -58,7 +51,6 @@ public class BesoinController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprimer un besoin", description = "Supprime un besoin du système")
-    @PreAuthorize("hasRole('ADMIN_SYSTEME') or hasRole('CHEF_PROJET')")
     public ResponseEntity<Void> deleteBesoin(@PathVariable Long id) {
         besoinService.deleteBesoin(id);
         return ResponseEntity.noContent().build();
@@ -73,7 +65,6 @@ public class BesoinController {
 
     @PatchMapping("/{id}/urgence")
     @Operation(summary = "Marquer comme urgent", description = "Marque un besoin comme urgent")
-    @PreAuthorize("hasRole('CHEF_PROJET')")
     public ResponseEntity<BesoinResponse> marquerUrgent(@PathVariable Long id) {
         BesoinResponse besoin = besoinService.marquerUrgent(id);
         return ResponseEntity.ok(besoin);

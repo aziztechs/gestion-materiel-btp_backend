@@ -54,7 +54,7 @@ public class Utilisateur {
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Besoin> besoins = new ArrayList<>();
 
-    @OneToMany(mappedBy = "validateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ValidationDevis> validations = new ArrayList<>();
 
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -63,7 +63,7 @@ public class Utilisateur {
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Approbation> approbations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "demandeur", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Urgence> urgences = new ArrayList<>();
 
     @Column(name = "is_active")

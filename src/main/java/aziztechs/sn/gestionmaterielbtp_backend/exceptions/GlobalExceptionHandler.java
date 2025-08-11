@@ -3,9 +3,7 @@ package aziztechs.sn.gestionmaterielbtp_backend.exceptions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,37 +50,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDeniedException(
-            AccessDeniedException ex, WebRequest request) {
-        log.error("Access denied: {}", ex.getMessage());
-        
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.FORBIDDEN.value())
-                .error("Access Denied")
-                .message("Vous n'avez pas les permissions nécessaires pour accéder à cette ressource")
-                .path(request.getDescription(false).replace("uri=", ""))
-                .build();
-        
-        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
-    }
 
-    @ExceptionHandler({BadCredentialsException.class, UsernameNotFoundException.class})
-    public ResponseEntity<ErrorResponse> handleAuthenticationException(
-            Exception ex, WebRequest request) {
-        log.error("Authentication error: {}", ex.getMessage());
-        
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.UNAUTHORIZED.value())
-                .error("Authentication Failed")
-                .message("Email ou mot de passe incorrect")
-                .path(request.getDescription(false).replace("uri=", ""))
-                .build();
-        
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
-    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> handleValidationExceptions(
