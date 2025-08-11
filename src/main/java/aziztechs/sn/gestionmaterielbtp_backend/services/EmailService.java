@@ -3,6 +3,7 @@ package aziztechs.sn.gestionmaterielbtp_backend.services;
 import aziztechs.sn.gestionmaterielbtp_backend.models.Besoin;
 import aziztechs.sn.gestionmaterielbtp_backend.models.Utilisateur;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
