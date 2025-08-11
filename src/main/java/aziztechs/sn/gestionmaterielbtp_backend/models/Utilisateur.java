@@ -57,10 +57,10 @@ public class Utilisateur {
     @OneToMany(mappedBy = "validateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ValidationDevis> validations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "createur", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Budget> budgets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "approbateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Approbation> approbations = new ArrayList<>();
 
     @OneToMany(mappedBy = "demandeur", cascade = CascadeType.ALL, orphanRemoval = true)
