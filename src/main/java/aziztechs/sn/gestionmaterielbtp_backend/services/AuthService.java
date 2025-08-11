@@ -3,6 +3,7 @@ package aziztechs.sn.gestionmaterielbtp_backend.services;
 import aziztechs.sn.gestionmaterielbtp_backend.dtos.JwtResponse;
 import aziztechs.sn.gestionmaterielbtp_backend.dtos.request.LoginRequest;
 import aziztechs.sn.gestionmaterielbtp_backend.dtos.request.SignupRequest;
+import aziztechs.sn.gestionmaterielbtp_backend.models.ERole;
 import aziztechs.sn.gestionmaterielbtp_backend.models.Utilisateur;
 import aziztechs.sn.gestionmaterielbtp_backend.repositories.UtilisateurRepository;
 import aziztechs.sn.gestionmaterielbtp_backend.utils.JwtUtils;
