@@ -35,6 +35,9 @@ public class Devis {
     @Size(max = 50)
     private String reference;
 
+    @Size(max = 500)
+    private String description;
+
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "besoin_id", nullable = false)
